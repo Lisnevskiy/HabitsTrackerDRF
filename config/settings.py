@@ -28,6 +28,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
 
     "rest_framework",
+
+    "habit.apps.HabitConfig"
 ]
 
 MIDDLEWARE = [
