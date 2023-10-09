@@ -6,7 +6,14 @@ from users.models import User
 
 
 class BaseSetup(APITestCase):
+    """
+    Базовый класс для настройки среды тестирования API.
+    """
     def setUp(self):
+        """
+        Метод настройки тестовой среды.
+        Инициализирует пользователя и создает привычку для использования в тестах API.
+        """
         self.user = User.objects.create_user(username='user', password='password')
         access_token = AccessToken.for_user(self.user)
         self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {access_token}')

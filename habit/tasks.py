@@ -1,11 +1,8 @@
 from datetime import datetime
-
 import telebot
 from celery import shared_task
-
 from config import settings
 from habit.models import Habit
-
 from users.models import User
 
 TELEGRAM_MESSAGE = """
@@ -17,7 +14,11 @@ TELEGRAM_MESSAGE = """
 
 @shared_task
 def send_telegram_notification():
-    bot = telebot.TeleBot(settings.TELEGRAM_BOT_TOKEN)
+    """
+    Задача Celery для отправки уведомлений через Telegram.
+    Отправляет уведомления пользователям о предстоящих привычках на основе текущего времени.
+    """
+    bot = telebot.TeleBot(settings.TELEGRAM_TOKEN)
 
     current_time = datetime.now().time()
 
