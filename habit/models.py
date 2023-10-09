@@ -24,7 +24,7 @@ class Habit(models.Model):
     is_nice = models.BooleanField(verbose_name='признак приятной привычки')
     periodicity_days = models.BigIntegerField(default=1, verbose_name='периодичность (дни)')
     reward = models.CharField(max_length=255, verbose_name='вознаграждение', **NULLABLE)
-    execution_times = models.BigIntegerField(default=120, verbose_name='время на выполнение')  # Измеряется в секундах.
+    execution_times = models.BigIntegerField(default=120, verbose_name='время на выполнение (секунды)')
     is_public = models.BooleanField(default=False, verbose_name='признак публичности')
 
     def __str__(self):
