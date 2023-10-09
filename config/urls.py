@@ -26,7 +26,7 @@ urlpatterns = [
     # Подключение URL-маршрутов приложения Users
     path('api/v1/users/', include('users.urls', namespace='users')),
     # URL для доступа к Swagger UI
-    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    path('api/v1/swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     # URL для доступа к ReDoc UI
-    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+    path('api/v1/redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 ]
