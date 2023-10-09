@@ -25,9 +25,6 @@ class ExecutionTimeValidator:
     def __call__(self, data):
         execution_time = data.get('execution_times')
 
-        if not execution_time:
-            raise ValidationError('Время выполнения должно быть указано!')
-
         if execution_time > 120:
             raise ValidationError('Время выполнения привычки не может превышать 120 секунд!')
 
