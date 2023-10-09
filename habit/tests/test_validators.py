@@ -1,27 +1,9 @@
-from django.contrib.auth.models import User
-from rest_framework.test import APITestCase
 from rest_framework import status
 
-from habit.models import Habit
+from habit.tests.base_setup import BaseSetup
 
 
-class ValidatorAPITestCase(APITestCase):
-
-    def setUp(self):
-        self.user = User.objects.create_user(username='testuser', password='testpassword')
-        self.client.login(username='testuser', password='testpassword')
-
-        self.habit = Habit.objects.create(
-            user=self.user,
-            place="At home",
-            time="13:00:00",
-            action='cleaning',
-            is_nice=False,
-            periodicity_days=1,
-            reward=None,
-            execution_times=120,
-            is_public=True
-        )
+class ValidatorAPITestCase(BaseSetup):
 
     def test_related_habit_and_reward_validator(self):
         data = {
