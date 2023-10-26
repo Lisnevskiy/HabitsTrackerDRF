@@ -1,0 +1,71 @@
+version: "3:11"
+
+services:
+  db:
+    image: postgres:latest
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRESQL_USER_NAME} -d ${POSTGRESQL_DB_NAME}" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  celery:
+    build: .
+    tty: true
+    command: celery -A config worker -l INFO
+    depends_on:
+      - redis
+      - app
+
+  celery_beat:
+    build: .
+    tty: true
+    command: celery -A config beat -l INFO
+    depends_on:
+      - redis
+      - app
+
+  tg-bot:
+    build: .
+    tty: true
+    env_file:
+      - .env
+    command: python3 manage.py run_tg_bot
+    depends_on:
+      - redis
+      - app
+      - celery
+      - celery_beat
+
+  app:
+    build: .
+    # В этой команде используется sh -c, чтобы выполнить обе команды через одну оболочку.
+    # Это гарантирует, что они будут выполняться поочередно внутри контейнера.
+    command: sh -c "python3 manage.py migrate && python3 manage.py runserver 0.0.0.0:8000"
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+volumes:
+  pg_data:
