@@ -22,7 +22,7 @@ def send_telegram_notification():
 
     current_time = datetime.now().time()
 
-    users = User.objects.filter(telegram_chat_id__isnull=False)
+    users = User.objects.filter(tg_chat_id__isnull=False)
 
     for user in users:
         habits = Habit.objects.filter(user=user)
@@ -31,4 +31,4 @@ def send_telegram_notification():
             if habit.time.hour == current_time.hour and habit.time.minute == current_time.minute:
                 message = TELEGRAM_MESSAGE.format(habit.action, habit.place)
 
-                bot.send_message(user.telegram_chat_id, message)
+                bot.send_message(user.tg_chat_id, message)
